@@ -1229,6 +1229,30 @@
         // ==========================================
         // 1. ДАНІ ШТАТІВ (БЕЗ ІНТЕРНЕТУ)
         // ==========================================
+        // ==========================================
+// 1. РАДАР ПОМИЛОК ДЛЯ iPHONE (щоб ми бачили, що ламається)
+window.onerror = function(message, source, lineno, colno, error) {
+    alert("🚨 Помилка iOS: \n" + message + "\nРядок: " + lineno);
+    return false;
+};
+
+// 2. ЛАТКА ДЛЯ СТАРИХ iOS (Рятує колоду від зникнення)
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+        r = r || 0;
+        this.beginPath();
+        this.moveTo(x + r, y);
+        this.arcTo(x + w, y, x + w, y + h, r);
+        this.arcTo(x + w, y + h, x, y + h, r);
+        this.arcTo(x, y + h, x, y, r);
+        this.arcTo(x, y, x + r, y, r);
+        this.closePath();
+        return this;
+    };
+}
+// ==========================================
+
+// ... тут починається твій звичайний код ...
         const USA_STATES = {
             'AL': { selfScale: 1, region: 'South', labelPos: { x: 633.2, y: 421.4 }, labelFontScale: 1, rankArea: 30, rankPop: 24, rankJoin: 22, capDX: 10, capDY: 5, customScale: 1.0, title: 'Alabama', capital: 'Montgomery', admissionYear: 1819, area: '52,420', population: '5.02M', capPop: '198,000', feature: 'The Heart of Dixie: a southern hub for civil rights history and Saturn V rocket engineering.' },
             'AK': { selfScale: 0.85, region: 'West', labelPos: { x: 111.2, y: 499 }, labelFontScale: 1, rankArea: 1, rankPop: 48, rankJoin: 49, capDX: 36, capDY: 35, customScale: 0.65, title: 'Alaska', capital: 'Juneau', admissionYear: 1959, area: '665,384', population: '0.73M', capPop: '32,000', feature: 'The Last Frontier: a vast wilderness of glaciers, grizzlies, and the highest peak in North America.' },
