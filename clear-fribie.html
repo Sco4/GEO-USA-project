@@ -1332,34 +1332,35 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
         const infoBtn = document.getElementById('info-btn');
         const infoModal = document.getElementById('info-modal');
         const closeInfoBtn = document.getElementById('close-info');
-        const fsBtn = document.getElementById('fullscreen-btn');
+        
 
+        // --- РОЗУМНА КНОПКА ФУЛСКРІНУ ---
+const fsBtn = document.getElementById('fullscreen-btn');
+if (fsBtn) {
+    // Детектор яблук (знаходить і iPhone, і хитрі iPad)
+    const isAppleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    if (isAppleMobile) {
+        // Якщо це Apple - безжалісно видаляємо кнопку з гри!
+        fsBtn.remove(); 
+    } else {
+        // Якщо це Windows/Android/Mac - вішаємо клік
         fsBtn.addEventListener('click', () => {
-    SoundFX.playPop();
-    
-    // 1. Стандартний сучасний фулскрін (Windows, Android, нові Mac)
-    if (document.documentElement.requestFullscreen) {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                console.warn(`Фулскрін заблоковано: ${err.message}`);
-            });
-        } else {
-            if (document.exitFullscreen) document.exitFullscreen();
-        }
-    } 
-    // 2. Старий яблучний фулскрін (деякі iPad та старі Safari)
-    else if (document.documentElement.webkitRequestFullscreen) {
-        if (!document.webkitFullscreenElement) {
-            document.documentElement.webkitRequestFullscreen();
-        } else {
-            if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-        }
-    } 
-    // 3. Якщо пристрій взагалі це не підтримує (iPhone) - тихо ігноруємо
-    else {
-        console.log("Фулскрін не підтримується на цьому пристрої 🍏");
+            SoundFX.playPop();
+            if (document.documentElement.requestFullscreen) {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.warn(`Фулскрін заблоковано: ${err.message}`);
+                    });
+                } else {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                }
+            }
+        });
     }
-});
+}
+// --------------------------------
 
         infoBtn.addEventListener('click', () => {
             infoModal.style.display = 'flex';
