@@ -1837,103 +1837,114 @@
             }
         }
 
-        function resizeCanvas() {
-            const wrap = document.querySelector('.canvas-wrap');
-            if (!wrap) return;
+function resizeCanvas() {
+    const wrap = document.querySelector('.canvas-wrap');
+    if (!wrap) return;
 
-            const homeBtn = document.getElementById('home-btn');
-            const restartBtn = document.getElementById('restart-btn');
-            const spinBtn = document.getElementById('spinBtn');
-            const picker = document.getElementById('mode-picker');
-            const qtySelector = document.querySelector('.quantity-selector');
-            const muteBtnElement = document.getElementById('mute-btn');
+    // ЗАПОБІЖНИК 1: Якщо контейнер схований або ще не завантажився - ніякої математики
+    if (wrap.clientWidth === 0 || wrap.clientHeight === 0) return;
 
-            const uiElements = [picker, qtySelector, spinBtn, restartBtn, homeBtn, muteBtnElement];
+    // ЗАПОБІЖНИК 2: Ігноруємо "фантомні" ресайзи від Safari
+    // Якщо ширина не змінилась, а висота стрибнула менше ніж на 100 пікселів 
+    // (це типово для адресної строки iOS), ми не стираємо Canvas!
+    const heightDiff = Math.abs(canvas.height - wrap.clientHeight);
+    if (canvas.width === wrap.clientWidth && heightDiff < 100 && canvas.width !== 0) {
+        return; 
+    }
 
-            uiElements.forEach(el => {
-                if (el) el.style.transition = 'none';
-            });
+    const homeBtn = document.getElementById('home-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const spinBtn = document.getElementById('spinBtn');
+    const picker = document.getElementById('mode-picker');
+    const qtySelector = document.querySelector('.quantity-selector');
+    const muteBtnElement = document.getElementById('mute-btn');
 
-            canvas.width = wrap.clientWidth;
-            canvas.height = wrap.clientHeight;
-            STATE.mapScale = canvas.width / 1400;
-            STATE.uiScale = Math.max(0.45, Math.min(1, canvas.width / 950));
+    const uiElements = [picker, qtySelector, spinBtn, restartBtn, homeBtn, muteBtnElement];
 
-            STATE.slot.w = 240 * STATE.uiScale;
-            STATE.slot.h = 270 * STATE.uiScale;
-            STATE.slotScale = 1.2 * STATE.uiScale;
+    uiElements.forEach(el => {
+        if (el) el.style.transition = 'none';
+    });
 
-            STATE.offsetMapX = 50 * STATE.mapScale;
-            STATE.offsetMapY = (canvas.height - (615 * STATE.mapScale)) / 2;
+    // Тільки тепер реально змінюємо розмір і очищаємо полотно
+    canvas.width = wrap.clientWidth;
+    canvas.height = wrap.clientHeight;
+    
+    STATE.mapScale = canvas.width / 1400;
+    STATE.uiScale = Math.max(0.45, Math.min(1, canvas.width / 950));
 
-            STATE.slot.cx = canvas.width - (150 * STATE.uiScale);
-            STATE.slot.cy = canvas.height * 0.52;
-            STATE.slot.x = STATE.slot.cx - (STATE.slot.w / 2);
-            STATE.slot.y = STATE.slot.cy - (STATE.slot.h / 2);
+    STATE.slot.w = 240 * STATE.uiScale;
+    STATE.slot.h = 270 * STATE.uiScale;
+    STATE.slotScale = 1.2 * STATE.uiScale;
 
-            const isGame = (STATE.screen === 'GAME');
-            const gameDisplay = isGame ? 'flex' : 'none';
+    STATE.offsetMapX = 50 * STATE.mapScale;
+    STATE.offsetMapY = (canvas.height - (615 * STATE.mapScale)) / 2;
 
-            if (qtySelector) {
-                qtySelector.style.display = gameDisplay;
-                qtySelector.style.position = 'absolute';
-                qtySelector.style.left = `${STATE.slot.cx}px`;
-                qtySelector.style.top = `${STATE.slot.y - 120 * STATE.uiScale}px`;
-                qtySelector.style.transform = `translate(-50%, 0) scale(${STATE.uiScale})`;
-                qtySelector.style.zIndex = "10";
-            }
+    STATE.slot.cx = canvas.width - (150 * STATE.uiScale);
+    STATE.slot.cy = canvas.height * 0.52;
+    STATE.slot.x = STATE.slot.cx - (STATE.slot.w / 2);
+    STATE.slot.y = STATE.slot.cy - (STATE.slot.h / 2);
 
-            if (picker) {
-                picker.style.display = isGame ? 'block' : 'none';
-                picker.style.position = 'absolute';
-                picker.style.width = "220px";
-                picker.style.left = `${STATE.slot.cx}px`;
-                picker.style.top = `${STATE.slot.y - 70 * STATE.uiScale}px`;
-                picker.style.setProperty('transform', `translate(-50%, 0) scale(${STATE.uiScale})`, 'important');
-                picker.style.zIndex = "10";
-            }
+    const isGame = (STATE.screen === 'GAME');
+    const gameDisplay = isGame ? 'flex' : 'none';
 
-            if (spinBtn) {
-                spinBtn.style.left = `${STATE.slot.cx}px`;
-                spinBtn.style.top = `${STATE.slot.y + STATE.slot.h + 20 * STATE.uiScale}px`;
-                spinBtn.style.transform = `translate(-50%, 0) scale(${STATE.uiScale})`;
-            }
+    if (qtySelector) {
+        qtySelector.style.display = gameDisplay;
+        qtySelector.style.position = 'absolute';
+        qtySelector.style.left = `${STATE.slot.cx}px`;
+        qtySelector.style.top = `${STATE.slot.y - 120 * STATE.uiScale}px`;
+        qtySelector.style.transform = `translate(-50%, 0) scale(${STATE.uiScale})`;
+        qtySelector.style.zIndex = "10";
+    }
 
-            // Системні кнопки зліва мають CSS-броню для `top` та `left`, 
-            // тому тут ми оновлюємо тільки їхній масштаб
-            if (homeBtn && restartBtn) {
-                homeBtn.style.display = gameDisplay;
-                homeBtn.style.transform = `scale(${STATE.uiScale})`;
-                homeBtn.style.transformOrigin = 'top left';
+    if (picker) {
+        picker.style.display = isGame ? 'block' : 'none';
+        picker.style.position = 'absolute';
+        picker.style.width = "220px";
+        picker.style.left = `${STATE.slot.cx}px`;
+        picker.style.top = `${STATE.slot.y - 70 * STATE.uiScale}px`;
+        picker.style.setProperty('transform', `translate(-50%, 0) scale(${STATE.uiScale})`, 'important');
+        picker.style.zIndex = "10";
+    }
 
-                restartBtn.style.display = gameDisplay;
-                restartBtn.style.transform = `scale(${STATE.uiScale})`;
-                restartBtn.style.transformOrigin = 'top left';
+    if (spinBtn) {
+        spinBtn.style.left = `${STATE.slot.cx}px`;
+        spinBtn.style.top = `${STATE.slot.y + STATE.slot.h + 20 * STATE.uiScale}px`;
+        spinBtn.style.transform = `translate(-50%, 0) scale(${STATE.uiScale})`;
+    }
 
-                muteBtnElement.style.display = 'flex';
-                muteBtnElement.style.transform = `scale(${STATE.uiScale})`;
-                muteBtnElement.style.transformOrigin = 'top left';
+    if (homeBtn && restartBtn) {
+        homeBtn.style.display = gameDisplay;
+        homeBtn.style.transform = `scale(${STATE.uiScale})`;
+        homeBtn.style.transformOrigin = 'top left';
 
-                const fsbtn = document.getElementById('fullscreen-btn');
-                if (fsbtn) {
-                    fsbtn.style.transform = `scale(${STATE.uiScale})`;
-                    fsbtn.style.transformOrigin = 'top left';
-                }
-            }
+        restartBtn.style.display = gameDisplay;
+        restartBtn.style.transform = `scale(${STATE.uiScale})`;
+        restartBtn.style.transformOrigin = 'top left';
 
-            const activeRegion = getActiveCard();
-            if (activeRegion && !activeRegion.isDragging) {
-                activeRegion.x = STATE.slot.cx;
-                activeRegion.y = getSlotY(activeRegion);
-                activeRegion.currentScale = STATE.slotScale * (activeRegion.selfScale || 1.0);
-            }
+        muteBtnElement.style.display = 'flex';
+        muteBtnElement.style.transform = `scale(${STATE.uiScale})`;
+        muteBtnElement.style.transformOrigin = 'top left';
 
-            setTimeout(() => {
-                uiElements.forEach(el => {
-                    if (el) el.style.transition = 'opacity 0.3s, background-color 0.3s';
-                });
-            }, 0);
+        const fsbtn = document.getElementById('fullscreen-btn');
+        if (fsbtn) {
+            fsbtn.style.transform = `scale(${STATE.uiScale})`;
+            fsbtn.style.transformOrigin = 'top left';
         }
+    }
+
+    const activeRegion = getActiveCard();
+    if (activeRegion && !activeRegion.isDragging) {
+        activeRegion.x = STATE.slot.cx;
+        activeRegion.y = getSlotY(activeRegion);
+        activeRegion.currentScale = STATE.slotScale * (activeRegion.selfScale || 1.0);
+    }
+
+    setTimeout(() => {
+        uiElements.forEach(el => {
+            if (el) el.style.transition = 'opacity 0.3s, background-color 0.3s';
+        });
+    }, 0);
+}
         window.addEventListener('resize', resizeCanvas);
 
         // --- INIT ---
