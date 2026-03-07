@@ -1223,10 +1223,12 @@
         </svg>
     </div>
 <button id="zoom-ne-btn" class="glass-btn sys-btn" style="display: none;" title="Zoom NE States">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-    </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="7"></circle>
+    <line x1="21" y1="21" x2="16" y2="16"></line>
+    <line x1="11" y1="8" x2="11" y2="14"></line>
+    <line x1="8" y1="11" x2="14" y2="11"></line>
+</svg>
 </button>
     </button>
     <script>
@@ -3021,7 +3023,12 @@ function toggleNEZoom() {
     const btn = document.getElementById('zoom-ne-btn');
 
     // 1. Твоя нова лупа з плюсиком (з Ілюстратора)
-    const svgMagnifier = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+    const svgMagnifier = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="7"></circle>
+    <line x1="21" y1="21" x2="16" y2="16"></line>
+    <line x1="11" y1="8" x2="11" y2="14"></line>
+    <line x1="8" y1="11" x2="14" y2="11"></line>
+</svg>`;
     
     // 2. Красивий SVG-хрестик для закриття зуму
     const svgClose = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
