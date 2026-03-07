@@ -218,6 +218,7 @@
         }
 
         .mode-picker-container {
+            
             position: absolute;
             width: 180px;
             height: 60px;
@@ -1865,16 +1866,6 @@ function resizeCanvas() {
     const wrap = document.querySelector('.canvas-wrap');
     if (!wrap) return;
 
-    // ЗАПОБІЖНИК 1: Якщо контейнер схований або ще не завантажився - ніякої математики
-    if (wrap.clientWidth === 0 || wrap.clientHeight === 0) return;
-
-    // ЗАПОБІЖНИК 2: Ігноруємо "фантомні" ресайзи від Safari
-    // Якщо ширина не змінилась, а висота стрибнула менше ніж на 100 пікселів 
-    // (це типово для адресної строки iOS), ми не стираємо Canvas!
-    const heightDiff = Math.abs(canvas.height - wrap.clientHeight);
-    if (canvas.width === wrap.clientWidth && heightDiff < 100 && canvas.width !== 0) {
-        return; 
-    }
 
     const homeBtn = document.getElementById('home-btn');
     const restartBtn = document.getElementById('restart-btn');
