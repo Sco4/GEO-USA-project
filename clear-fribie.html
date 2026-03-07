@@ -1334,24 +1334,29 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
         const closeInfoBtn = document.getElementById('close-info');
         
 
-        // --- РОЗУМНА КНОПКА ФУЛСКРІНУ ---
+       // --- РОЗУМНА КНОПКА ФУЛСКРІНУ ТА ПІДКАЗКА ---
 const fsBtn = document.getElementById('fullscreen-btn');
-if (fsBtn) {
-    // Детектор яблук (знаходить і iPhone, і хитрі iPad)
-    const isAppleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const fsHint = document.getElementById('fs-hint'); // Знайшли підказку
 
-    if (isAppleMobile) {
-        // Якщо це Apple - безжалісно видаляємо кнопку з гри!
-        fsBtn.remove(); 
-    } else {
-        // Якщо це Windows/Android/Mac - вішаємо клік
+// Детектор яблук
+const isAppleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+if (isAppleMobile) {
+    // 1. Безжалісно видаляємо кнопку
+    if (fsBtn) fsBtn.remove(); 
+    
+    // 2. Так само безжалісно видаляємо підказку
+    if (fsHint) fsHint.remove(); 
+} else {
+    // Якщо це Windows/Android/Mac - вішаємо клік на кнопку
+    if (fsBtn) {
         fsBtn.addEventListener('click', () => {
             SoundFX.playPop();
             if (document.documentElement.requestFullscreen) {
                 if (!document.fullscreenElement) {
                     document.documentElement.requestFullscreen().catch(err => {
-                        console.warn(`Фулскрін заблоковано: ${err.message}`);
+                        console.warn(`Fullscreen is locked: ${err.message}`);
                     });
                 } else {
                     if (document.exitFullscreen) document.exitFullscreen();
@@ -1360,6 +1365,7 @@ if (fsBtn) {
         });
     }
 }
+// ---------------------------------------------
 // --------------------------------
 
         infoBtn.addEventListener('click', () => {
