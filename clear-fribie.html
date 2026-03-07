@@ -988,6 +988,14 @@
     transform: scale(1.1); /* Легке збільшення, як і у звичайної лупи */
     box-shadow: 0 4px 15px rgba(248, 113, 113, 0.4); /* Додаємо легке червоне світіння (неоновий ефект) */
 }
+
+
+#zoom-ne-btn svg {
+    width: 20px !important; 
+    height: 20px !important;
+    display: block;
+    flex-shrink: 0;
+}
     </style>
 </head>
 
@@ -3092,7 +3100,7 @@ function positionZoomButton() {
     btn.style.display = 'flex';
     // Координати Атлантичного океану на SVG мапі (орієнтовні)
     const oceanX = 960; 
-    const oceanY = 150;
+    const oceanY = 100;
 
     // Рахуємо реальні координати на екрані гравця
     const screenX = STATE.offsetMapX + (oceanX * STATE.mapScale);
