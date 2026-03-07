@@ -1335,17 +1335,31 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
         const fsBtn = document.getElementById('fullscreen-btn');
 
         fsBtn.addEventListener('click', () => {
-            SoundFX.playPop();
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        });
+    SoundFX.playPop();
+    
+    // 1. Стандартний сучасний фулскрін (Windows, Android, нові Mac)
+    if (document.documentElement.requestFullscreen) {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.warn(`Фулскрін заблоковано: ${err.message}`);
+            });
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+        }
+    } 
+    // 2. Старий яблучний фулскрін (деякі iPad та старі Safari)
+    else if (document.documentElement.webkitRequestFullscreen) {
+        if (!document.webkitFullscreenElement) {
+            document.documentElement.webkitRequestFullscreen();
+        } else {
+            if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        }
+    } 
+    // 3. Якщо пристрій взагалі це не підтримує (iPhone) - тихо ігноруємо
+    else {
+        console.log("Фулскрін не підтримується на цьому пристрої 🍏");
+    }
+});
 
         infoBtn.addEventListener('click', () => {
             infoModal.style.display = 'flex';
@@ -2060,6 +2074,18 @@ function resizeCanvas() {
             if (restartBtnEl) {
                 restartBtnEl.addEventListener('click', restartGame);
             }
+            const fsbtn = document.getElementById('fullscreen-btn');
+    if (fsbtn) {
+        // Шукаємо iPhone, старі iPad, АБО нові iPad (які прикидаються Mac, але мають сенсорний екран)
+        const isAppleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        
+        if (isAppleMobile) {
+            // Назавжди ховаємо кнопку
+            fsbtn.style.display = 'none !important';
+            fsbtn.classList.add('hidden-on-ios'); 
+        }
+    }
         }
 // --- Видалення підказки фулскріну після анімації ---
       // --- 2. НОВЕ: Миттєве видалення при ПЕРШІЙ взаємодії (кліку) з грою
