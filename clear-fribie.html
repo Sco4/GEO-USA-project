@@ -1039,9 +1039,10 @@
 }
 
 /* МАГІЯ: Показуємо тільки на вертикальних (Portrait) екранах до 1024px шириною (включаючи iPad) */
-@media screen and (orientation: portrait) and (max-device-width: 1024px) {
+/* МАГІЯ: Показуємо на вертикальних (Portrait) екранах */
+@media screen and (orientation: portrait) and (max-width: 1024px) {
     #rotate-device-overlay {
-        display: flex;
+        display: flex !important;
     }
 }
     </style>
