@@ -1314,20 +1314,37 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
         const infoBtn = document.getElementById('info-btn');
         const infoModal = document.getElementById('info-modal');
         const closeInfoBtn = document.getElementById('close-info');
-        const fsBtn = document.getElementById('fullscreen-btn');
+         // --- РОЗУМНА КНОПКА ФУЛСКРІНУ ТА ПІДКАЗКА ---
+const fsBtn = document.getElementById('fullscreen-btn');
+const fsHint = document.getElementById('fs-hint'); // Знайшли підказку
 
+// Детектор яблук
+const isAppleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+if (isAppleMobile) {
+    // 1. Безжалісно видаляємо кнопку
+    if (fsBtn) fsBtn.remove(); 
+    
+    // 2. Так само безжалісно видаляємо підказку
+    if (fsHint) fsHint.remove(); 
+} else {
+    // Якщо це Windows/Android/Mac - вішаємо клік на кнопку
+    if (fsBtn) {
         fsBtn.addEventListener('click', () => {
             SoundFX.playPop();
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
+            if (document.documentElement.requestFullscreen) {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.warn(`Fullscreen is locked: ${err.message}`);
+                    });
+                } else {
+                    if (document.exitFullscreen) document.exitFullscreen();
                 }
             }
         });
+    }
+}
 
         infoBtn.addEventListener('click', () => {
             infoModal.style.display = 'flex';
