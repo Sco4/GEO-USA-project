@@ -2076,18 +2076,28 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
         }
 
         function spinRoulette() {
-            const placed = getPlacedCards();
-            const deck = getDeckCards();
-            const currentActive = getActiveCard();
+           const placed = getPlacedCards();
+    const currentActive = getActiveCard();
 
-            if (placed.length >= STATE.gameLimit || deck.length === 0) {
-                checkVictory();
-                return;
-            }
+    // 1. Спочатку перевіряємо, чи не досягли ми ліміту (10 для Фрібі)
+    if (placed.length >= STATE.gameLimit) {
+        checkVictory();
+        return;
+    }
 
-            if (currentActive && currentActive.status !== STATUS.PLACED) {
-                currentActive.status = STATUS.DECK;
-            }
+    // 2. Якщо натиснули NEXT (скіпнули карту), повертаємо її назад у колоду
+    if (currentActive && currentActive.status !== STATUS.PLACED) {
+        currentActive.status = STATUS.DECK;
+    }
+
+    // 3. ТІЛЬКИ ТЕПЕР рахуємо карти в колоді (вона тепер враховує повернуту карту)
+    const deck = getDeckCards();
+
+    // 4. Якщо колода реально порожня (всі штати відгадані)
+    if (deck.length === 0) {
+        checkVictory();
+        return;
+    }
 
             STATE.isShuffling = true;
             spinBtn.disabled = true;
