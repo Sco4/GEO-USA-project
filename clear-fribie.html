@@ -993,10 +993,73 @@
     display: block;
     flex-shrink: 0;
 }
+
+/* --- СТИЛІ ДЛЯ ПЛАШКИ ПОВЕРТАННЯ --- */
+#rotate-device-overlay {
+    display: none; /* За замовчуванням сховано */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #1a1a2e; /* Темно-синій фон, як у твоїй грі */
+    color: white;
+    z-index: 99999; /* Поверх абсолютно всього */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.rotate-content svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    animation: rotatePhone 2s infinite ease-in-out;
+}
+
+.rotate-content h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-family: sans-serif; /* Або твій ігровий шрифт */
+}
+
+.rotate-content p {
+    font-size: 16px;
+    opacity: 0.8;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+/* Анімація хитання телефону */
+@keyframes rotatePhone {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(-90deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* МАГІЯ: Показуємо тільки на вертикальних (Portrait) екранах до 1024px шириною (включаючи iPad) */
+@media screen and (orientation: portrait) and (max-device-width: 1024px) {
+    #rotate-device-overlay {
+        display: flex;
+    }
+}
     </style>
 </head>
 
 <body class="geo-page">
+
+    <div id="rotate-device-overlay">
+    <div class="rotate-content">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            <path d="M20 12h2a10 10 0 0 1-10 10v-2a8 8 0 0 0 8-8z"></path>
+        </svg>
+        <h2>Please Rotate Your Device</h2>
+        <p>This map game requires Landscape mode to play comfortably.</p>
+    </div>
+</div>
 
     <div class="app">
         <div class="brand-watermark">Apex Interactive Labs</div>
