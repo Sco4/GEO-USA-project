@@ -463,13 +463,24 @@
             background: transparent !important;
             z-index: 50;
             padding-top: 10px;
+
+            padding: 20px 0;
+            /* overflow-y: auto; */
+
+            overflow-y: auto;         /* Вмикаємо сам скрол */
+            scrollbar-width: none;    /* Ховаємо смугу у Firefox */
+            -ms-overflow-style: none; /* Ховаємо смугу у старих Edge/IE */
+        }
+
+        .start-overlay::-webkit-scrollbar {
+            display: none;
         }
 
         .start-overlay h1 {
             color: #f8fafc;
             font-family: system-ui, sans-serif;
             font-size: 48px;
-            margin-bottom: 40px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
@@ -477,7 +488,7 @@
             color: #94a3b8;
             font-family: system-ui, sans-serif;
             font-size: 16px;
-            margin-top: 40px;
+            margin-top: 15px;
         }
 
         .mode-container {
