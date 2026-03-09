@@ -1073,12 +1073,13 @@
         <div id="info-modal" class="modal-overlay" style="display:none;">
             <div class="modal-content ">
                 <h3 style="color: #A7F3D0; margin-top: 0;">APEX Interactive Labs</h3>
-                <p><b>USA Geography Pro</b> is optimized for classroom use.</p>
+                <p><b>USA Geography Pro</b> is optimized for classroom use:</p>
                 <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
                 <ul style="text-align: left; list-style: none; padding: 0; line-height: 1.8;">
-                    <li>✅ 100% Offline (No internet required)</li>
-                    <li>✅ Zero data collection</li>
-                    <li>✅ Student-safe environment</li>
+                    <li>✅ Play Anywhere (Offline & Cloud)</li>
+                    <li>✅ 100% Student-Safe (COPPA & FERPA Compliant)</li>
+                    <li>✅ No Accounts, No Ads, No Distractions</li>
+                    <li>✅ Universal Classroom Access</li>
                 </ul>
                 <button id="close-info" class="ui-btn" style="margin-top: 15px; width: 100%;">CLOSE</button>
             </div>
@@ -1974,14 +1975,14 @@ function resizeCanvas() {
     canvas.width = wrap.clientWidth;
     canvas.height = wrap.clientHeight;
     
-    STATE.mapScale = canvas.width / 1400;
+    STATE.mapScale = canvas.width / 1250;
     STATE.uiScale = Math.max(0.45, Math.min(1, canvas.width / 950));
 
     STATE.slot.w = 240 * STATE.uiScale;
     STATE.slot.h = 270 * STATE.uiScale;
     STATE.slotScale = 1.2 * STATE.uiScale;
 
-    STATE.offsetMapX = 50 * STATE.mapScale;
+    STATE.offsetMapX = 20 * STATE.mapScale;
     STATE.offsetMapY = (canvas.height - (615 * STATE.mapScale)) / 2;
 
     STATE.slot.cx = canvas.width - (150 * STATE.uiScale);
