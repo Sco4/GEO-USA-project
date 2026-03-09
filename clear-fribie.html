@@ -1975,14 +1975,14 @@ function resizeCanvas() {
     canvas.width = wrap.clientWidth;
     canvas.height = wrap.clientHeight;
     
-    STATE.mapScale = canvas.width / 1250;
+    STATE.mapScale = canvas.width / 1400;
     STATE.uiScale = Math.max(0.45, Math.min(1, canvas.width / 950));
 
     STATE.slot.w = 240 * STATE.uiScale;
     STATE.slot.h = 270 * STATE.uiScale;
     STATE.slotScale = 1.2 * STATE.uiScale;
 
-    STATE.offsetMapX = 20 * STATE.mapScale;
+    STATE.offsetMapX = 50 * STATE.mapScale;
     STATE.offsetMapY = (canvas.height - (615 * STATE.mapScale)) / 2;
 
     STATE.slot.cx = canvas.width - (150 * STATE.uiScale);
