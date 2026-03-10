@@ -458,6 +458,10 @@
         .start-overlay::after {
             content: '';
             margin: auto;
+
+            /* --- НОВІ РЯДКИ --- */
+            min-height: 20px; /* Гарантований простір, який ніколи не зникне */
+            flex-shrink: 0;   /* Суворо забороняємо браузеру стискати цю пружину менше ніж на 30px */
         }
 
         .start-overlay::-webkit-scrollbar {
