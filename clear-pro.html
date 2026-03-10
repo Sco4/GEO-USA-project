@@ -439,10 +439,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            /* justify-content: center; */
             background: transparent !important;
             z-index: 50;
             padding-top: 10px;
+
+                        overflow-y: auto;         /* Вмикаємо сам скрол */
+            scrollbar-width: none;    /* Ховаємо смугу у Firefox */
+            -ms-overflow-style: none; /* Ховаємо смугу у старих Edge/IE */
+        }
+
+        .start-overlay::before,
+        .start-overlay::after {
+            content: '';
+            margin: auto;
         }
 
         .start-overlay h1 {
