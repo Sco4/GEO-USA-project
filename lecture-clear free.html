@@ -1037,10 +1037,67 @@
         .pro-btn-cancel:active {
             transform: scale(0.97);
         }
+
+        /* =========================================
+           📱 СТИЛІ ДЛЯ ПЛАШКИ ПОВЕРТАННЯ
+           ========================================= */
+        #rotate-device-overlay {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #0f172a; /* Наш фірмовий темний фон */
+            color: white;
+            z-index: 9999999; /* Поверх АБСОЛЮТНО ВСЬОГО, навіть пароля */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .rotate-content svg {
+            width: 80px; height: 80px;
+            margin-bottom: 20px;
+            animation: rotatePhone 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 8px rgba(100, 255, 218, 0.4));
+        }
+
+        .rotate-content h2 {
+            font-size: 24px; margin-bottom: 10px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .rotate-content p {
+            font-size: 16px; opacity: 0.8; max-width: 80%; margin: 0 auto;
+            color: #e2e8f0;
+        }
+
+        @keyframes rotatePhone {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(-90deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Показуємо на вертикальних екранах (вкл. iPad) */
+        @media screen and (orientation: portrait) and (max-width: 1024px) {
+            #rotate-device-overlay {
+                display: flex !important;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <div id="rotate-device-overlay">
+        <div class="rotate-content">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+            <h2 style="color: hsl(0, 0%, 100%);">Please Rotate Your Device</h2>
+            <p>This interactive map requires Landscape mode to play comfortably.</p>
+        </div>
+    </div>
 
     <div id="pro-modal" class="modal-overlay">
         <div class="modal-content" style="text-align: center; border-color: #fbbf24;">
@@ -1049,7 +1106,7 @@
                 to the PRO version to unlock all 50 states and all 4 regions!</p>
 
             <button class="ui-btn pro-btn-upgrade"
-                onclick="window.open('https://www.teacherspayteachers.com/Product/GeoUSA-PRO-Interactive-US-Geography-Game-50-States-Capitals-Assessment-15809595', '_blank')">GET
+                onclick="window.open('https://www.teacherspayteachers.com/Product/Interactive-50-States-Map-Fact-Encyclopedia-US-Geography-15857663', '_blank')">GET
                 FULL 50 STATES</button>
             <button id="close-pro" class="ui-btn pro-btn-cancel"
                 onclick="document.getElementById('pro-modal').classList.remove('active')">MAYBE LATER</button>
