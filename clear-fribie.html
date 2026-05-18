@@ -1105,6 +1105,65 @@
         .pro-btn-cancel:active {
             transform: scale(0.97); /* Легке стиснення при кліку */
         }
+        /* Темний фон з розмиттям, щоб сфокусувати увагу виключно на вікні */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 23, 42, 0.85); /* Глибокий синій/чорний */
+        backdrop-filter: blur(5px);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 9999;
+    }
+
+    /* Коробка з легким неоновим світінням (вказує на преміальність) */
+    .pro-modal-content {
+        background: linear-gradient(145deg, #1e293b, #0f172a);
+        border: 2px solid #fbbf24; /* Золотий акцент */
+        border-radius: 16px;
+        padding: 30px 25px 20px;
+        max-width: 420px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(251, 191, 36, 0.2);
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* Типографіка вікна */
+    .pro-modal-content h2 {
+        color: #fbbf24; font-size: 26px; font-weight: 800;
+        margin: 0 0 12px 0; letter-spacing: 0.5px;
+    }
+    .pro-modal-content .pro-desc {
+        color: #e2e8f0; font-size: 15px; line-height: 1.5; margin-bottom: 24px;
+    }
+    .pro-modal-content .pro-desc b { color: #ffffff; }
+
+    /* Агресивна кнопка продажу з ефектом наведення */
+    .pro-btn-upgrade {
+        background: #fbbf24; color: #0f172a;
+        font-size: 18px; font-weight: 800;
+        padding: 16px 20px; width: 100%;
+        border: none; border-radius: 8px; cursor: pointer;
+        text-transform: uppercase; letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+        transition: all 0.2s ease;
+    }
+    .pro-btn-upgrade:hover {
+        background: #f59e0b; transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
+    }
+
+    /* Мікрокопірайтинг (Тригер довіри) */
+    .pro-trust-text {
+        color: #94a3b8; font-size: 12px; margin: 12px 0 20px 0;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+
+    /* Кнопка відмови (Ghost-button, щоб її не хотілося натискати) */
+    .pro-btn-cancel {
+        background: transparent; color: #64748b;
+        border: none; font-size: 13px; font-weight: 600; cursor: pointer;
+        text-decoration: underline; transition: color 0.2s;
+    }
+    .pro-btn-cancel:hover { color: #cbd5e1; }
     </style>
 </head>
 
@@ -1146,16 +1205,23 @@
         </div>
 
 <div id="pro-modal" class="modal-overlay" style="display:none;">
-            <div class="modal-content" style="text-align: center; border-color: #fbbf24;">
-                <h2 style="color: #fbbf24; margin-top: 0; margin-bottom: 5px;">Unlock the Full Map!</h2>
-                <p style="color: #e2e8f0; font-size: 15px;">You are playing the <b>Starter Edition</b> (10 states). Upgrade to the PRO version to unlock all 50 states, Capital Mode, Mastermind Analytics, and more!</p>
-                
-                <button class="ui-btn pro-btn-upgrade" onclick="window.open('https://www.teacherspayteachers.com/Product/GeoUSA-PRO-Interactive-US-Geography-Game-50-States-Capitals-Assessment-15809595?utm_source=Free_USA_Map_App&utm_campaign=lock_on_elements', '_blank')">Get PRO on TeachersPayTeachers</button>
-                                <p style="color: #e2e8f0; font-size: 15px;">Safe & secure checkout. School Purchase Orders accepted.</p>
-
-                <button id="close-pro" class="ui-btn pro-btn-cancel">MAYBE LATER</button>
-            </div>
+    <div class="pro-modal-content">
+        <h2>Unlock the Full Map!</h2>
+        
+        <p class="pro-desc">You are playing the <b>Starter Edition</b> (10 states). Upgrade to the PRO version to unlock all 50 states, Capital Mode, Mastermind Analytics, and more!</p>
+        
+        <button class="pro-btn-upgrade" onclick="window.open('https://www.teacherspayteachers.com/Product/GeoUSA-PRO-Interactive-US-Geography-Game-50-States-Capitals-Assessment-15809595?utm_source=Free_USA_Map_App&utm_campaign=lock_on_elements', '_blank')">
+            Get PRO on TeachersPayTeachers
+        </button>
+        
+        <div class="pro-trust-text">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+            Safe & secure checkout. School Purchase Orders accepted.
         </div>
+
+        <button id="close-pro" class="pro-btn-cancel">MAYBE LATER</button>
+    </div>
+</div>
 
         <main class="canvas-wrap">
             <button id="home-btn" class="ui-btn" style="display: none;" title="Home">
@@ -2862,35 +2928,33 @@ function getDeckCards() {
             STATE.showNames = STATE.modes[STATE.currentModeIdx].names;
         }
 
-        function showVictoryModal(timeStr, modeStr, stats) {
-            STATE.isGameOver = true;
-            const oldOverlay = document.getElementById('victoryOverlay');
-            if (oldOverlay) oldOverlay.remove();
+       function showVictoryModal(timeStr, modeStr, stats) {
+    STATE.isGameOver = true;
+    const oldOverlay = document.getElementById('victoryOverlay');
+    if (oldOverlay) oldOverlay.remove();
 
-            const overlay = document.createElement('div');
-            overlay.id = 'victoryOverlay';
+    const overlay = document.createElement('div');
+    overlay.id = 'victoryOverlay';
 
-            const clickLabel = STATE.gameType === 'PUZZLE' ? 'Attempts' : 'Clicks';
-            const currentModeName = STATE.modes[STATE.currentModeIdx]?.text || "NORMAL";
+    const clickLabel = STATE.gameType === 'PUZZLE' ? 'Attempts' : 'Clicks';
+    const currentModeName = STATE.modes[STATE.currentModeIdx]?.text || "NORMAL";
 
-           overlay.innerHTML = `
+    overlay.innerHTML = `
         <style>
             #victoryOverlay {
                 position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-                background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(8px);
+                background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
                 display: flex; justify-content: center; align-items: center; z-index: 10000;
                 opacity: 0; animation: vicFadeIn 0.4s ease forwards;
                 font-family: 'Segoe UI', system-ui, sans-serif;
             }
             .vic-card {
                 background: linear-gradient(145deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 1));
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 24px; padding: 30px; text-align: center;
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-                max-width: 360px; width: 85%;
+                border: 2px solid rgba(74, 222, 128, 0.3); /* Легкий зелений контур успіху */
+                border-radius: 24px; padding: 35px 30px 25px; text-align: center;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+                max-width: 380px; width: 85%;
                 transform: scale(0.9); animation: vicPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-                
-                /* --- МАГІЯ СКРОЛУ ТЕПЕР ТУТ --- */
                 max-height: 85vh; 
                 overflow-y: auto; 
                 scrollbar-width: none; 
@@ -2898,107 +2962,86 @@ function getDeckCards() {
                 touch-action: pan-y; 
             }
             
-            /* Вбиваємо сіру смугу */
-            .vic-card::-webkit-scrollbar {
-                display: none;
-            }
+            .vic-card::-webkit-scrollbar { display: none; }
 
             .vic-cup {
-                font-size: 50px; margin-bottom: 10px; display: inline-block;
+                font-size: 55px; margin-bottom: 5px; display: inline-block;
                 animation: vicFloat 3s ease-in-out infinite;
             }
             @keyframes vicFloat {
                 0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-12px); }
+                50% { transform: translateY(-10px); }
             }
-            .vic-title { color: #4ade80; font-size: 32px; font-weight: 900; margin: 5px 0; letter-spacing: 1px; }
+            .vic-title { color: #4ade80; font-size: 34px; font-weight: 900; margin: 0; letter-spacing: 1px; }
             
             .vic-game-info {
                 display: flex; justify-content: center; gap: 8px;
-                margin-bottom: 20px; font-size: 10px; font-weight: 700;
+                margin: 10px 0 20px; font-size: 10px; font-weight: 700;
                 text-transform: uppercase; letter-spacing: 1px;
             }
             .info-tag { background: rgba(59, 130, 246, 0.15); color: #60a5fa; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(59, 130, 246, 0.3); }
             .mode-tag { background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(74, 222, 128, 0.3); }
 
-            .vic-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+            .vic-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
             .vic-stat-box { background: rgba(255, 255, 255, 0.04); border-radius: 16px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.06); }
             .vic-stat-label { font-size: 9px; color: #64748b; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; }
-            .vic-stat-val { font-size: 19px; color: #f8fafc; font-weight: 900; }
-            .full-width { grid-column: span 2; }
+            .vic-stat-val { font-size: 20px; color: #f8fafc; font-weight: 900; }
             
             .time-fast { color: #4ade80; margin-left: 4px; }
             .time-slow { color: #fca5a5; margin-left: 4px; }
 
-            /* --- НОВІ СТИЛІ ДЛЯ ПАСТКИ PRO ВЕРСІЇ --- */
             .pro-teaser-box {
                 position: relative;
-                background: rgba(251, 191, 36, 0.05);
-                border: 1px dashed rgba(251, 191, 36, 0.3);
-                border-radius: 16px;
-                padding: 12px;
-                margin-bottom: 25px;
+                background: rgba(251, 191, 36, 0.03);
+                border: 1px dashed rgba(251, 191, 36, 0.25);
+                border-radius: 16px; padding: 12px; margin-bottom: 24px;
                 overflow: hidden;
             }
-            .blurred-text {
-                filter: blur(2px);
-                opacity: 0.5;
-                user-select: none;
-            }
+            .blurred-text { filter: blur(3px); opacity: 0.4; user-select: none; }
             .pro-overlay {
-                position: absolute;
-                top: 0; left: 0; width: 100%; height: 100%;
-                background: linear-gradient(to top, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.3));
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 2;
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                background: linear-gradient(to top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.4));
+                display: flex; align-items: center; justify-content: center; z-index: 2;
             }
             .pro-badge {
-                background: rgba(251, 191, 36, 0.15);
-                color: #fbbf24;
-                padding: 6px 14px;
-                border-radius: 20px;
-                border: 1px solid #fbbf24;
-                font-weight: 800;
-                font-size: 11px;
-                letter-spacing: 1px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+                background: rgba(251, 191, 36, 0.12); color: #fbbf24;
+                padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(251, 191, 36, 0.4);
+                font-weight: 800; font-size: 10px; letter-spacing: 1px;
+                display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             }
             
-            /* Кнопка покупки */
             .vic-btn-pro {
-                background: #fbbf24;
-                color: #000;
-                border: none;
-                border-radius: 12px;
-                padding: 16px; font-size: 15px; font-weight: 900;
-                cursor: pointer; width: 100%;
-                transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
-                margin-bottom: 12px;
+                background: #fbbf24; color: #0f172a; border: none; border-radius: 12px;
+                padding: 16px; font-size: 16px; font-weight: 900; cursor: pointer; width: 100%;
+                transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.5px;
                 box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
             }
             .vic-btn-pro:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5); }
 
-            .vic-btn {
-                background: transparent; color: #4ade80; 
-                border: 1px solid rgba(74, 222, 128, 0.4); border-radius: 12px;
-                padding: 12px; font-size: 13px; font-weight: 600;
-                cursor: pointer; width: 100%; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+            .vic-trust-text {
+                color: #64748b; font-size: 11px; margin: 10px 0 20px 0;
+                display: flex; align-items: center; justify-content: center; gap: 5px;
             }
-            .vic-btn:hover { background: rgba(34, 197, 94, 0.08); border-color: #4ade80; }
 
-            .vic-home-btn { background: transparent; border: none; color: #94a3b8; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
-            .vic-home-btn:hover { color: #facc15; }
+            .vic-btn {
+                background: transparent; color: #e2e8f0; 
+                border: 1px solid rgba(226, 232, 240, 0.2); border-radius: 12px;
+                padding: 12px; font-size: 13px; font-weight: 600;
+                cursor: pointer; width: 100%; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 1px;
+            }
+            .vic-btn:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(226, 232, 240, 0.4); }
+
+            .vic-home-btn { background: transparent; border: none; color: #475569; font-size: 11px; font-weight: 700; cursor: pointer; margin-top: 16px; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
+            .vic-home-btn:hover { color: #fbbf24; }
 
             @keyframes vicFadeIn { to { opacity: 1; } }
             @keyframes vicPopIn { to { transform: scale(1); } }
         </style>
 
-       <div class="vic-card">
+        <div class="vic-card">
             <div class="vic-cup">🏆</div>
             <h1 class="vic-title">CONGRATS!</h1>
-            <div class="vic-subtitle" style="color: #94a3b8; margin-bottom: 15px;">Starter Edition Complete</div>
+            <div class="vic-subtitle" style="color: #94a3b8; font-size: 14px; font-weight: 600;">Starter Edition Complete</div>
             
             <div class="vic-game-info">
                 <span class="info-tag">${STATE.gameType}</span>
@@ -3018,27 +3061,42 @@ function getDeckCards() {
 
             <div class="pro-teaser-box">
                 <div class="blurred-text">
-                    <div class="vic-stat-box full-width" style="border: none; padding: 5px; background: transparent;">
+                    <div class="vic-stat-box" style="border: none; padding: 4px; background: transparent;">
                         <div class="vic-stat-label">🚀 Fastest Found</div>
-                        <div class="vic-stat-val" style="font-size: 15px;">${stats.fastest.name} <span class="time-fast">${stats.fastest.time.toFixed(1)}s</span></div>
+                        <div class="vic-stat-val" style="font-size: 14px;">${stats.fastest.name} <span class="time-fast">${stats.fastest.time.toFixed(1)}s</span></div>
                     </div>
-                    <div class="vic-stat-box full-width" style="border: none; padding: 5px; background: transparent;">
+                    <div class="vic-stat-box" style="border: none; padding: 4px; background: transparent;">
                         <div class="vic-stat-label">🐢 Longest Thinking</div>
-                        <div class="vic-stat-val" style="font-size: 15px;">${stats.slowest.name} <span class="time-slow">${stats.slowest.time.toFixed(1)}s</span></div>
+                        <div class="vic-stat-val" style="font-size: 14px;">${stats.slowest.name} <span class="time-slow">${stats.slowest.time.toFixed(1)}s</span></div>
                     </div>
                 </div>
                 <div class="pro-overlay">
-                    <div class="pro-badge">MASTERMIND ANALYTICS 🔒</div>
+                    <div class="pro-badge">
+                        <svg width="10" height="10" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+                        DETAILED PERFORMANCE INSIGHTS 🔒
+                    </div>
                 </div>
             </div>
             
-            <button class="vic-btn-pro" onclick="window.open('https://www.teacherspayteachers.com/Product/GeoUSA-PRO-Interactive-US-Geography-Game-50-States-Capitals-Assessment-15809595', '_blank')">UNLOCK ALL 50 STATES</button>
+            <button class="vic-btn-pro" onclick="window.open('https://www.teacherspayteachers.com/Product/GeoUSA-PRO-Interactive-US-Geography-Game-50-States-Capitals-Assessment-15809595?utm_source=Free_USA_Map_App&utm_campaign=Finish_Screen_Upsell', '_blank')">
+                Unlock All 50 States & Quizzes
+            </button>
+            
+            <div class="vic-trust-text">
+                <svg width="11" height="11" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+                Safe checkout. School Purchase Orders accepted.
+            </div>
+
             <button class="vic-btn" id="playAgainBtn">PLAY AGAIN (RANDOM 10)</button>
+            
             <div>
                 <button class="vic-home-btn" id="vicHomeBtn">Main Menu</button>
             </div>
         </div>
     `;
+    
+    // Далі твій оригінальний код для апенду та лісенерів кнопок...
+
 
             document.body.appendChild(overlay);
 
